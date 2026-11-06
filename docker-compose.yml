@@ -1,34 +1,50 @@
+
+name: microservices-deployment
+
 services:
-  postgres:
-    image: postgres:16
-    container_name: hotel-postgres
+  postgresdb:
+    image: postgres:16-alpine
+    container_name: postgresdb
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: hotel_db
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: Kanehitesh!!2
+      POSTGRES_DB: skill_exam_2400030283
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d hotel_db"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d skill_exam_2400030283"]
       interval: 5s
       timeout: 5s
       retries: 10
+      start_period: 10s
+    networks:
+      - microservices-network
 
-  backend:
-    image: docker-skill-exam-2400030283:latest
-    container_name: hotel-backend
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/hotel_db
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
-      SERVER_PORT: 2222
+  hotel-service:
+    image: hotel-service:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hotel-service
     ports:
-      - "30283:2222"
+      - "9000:9000"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresdb:5432/skill_exam_2400030283
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Kanehitesh!!2
+    depends_on:
+      postgresdb:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - microservices-network
 
 volumes:
   postgres_data:
+
+networks:
+  microservices-network:
+    driver: bridge
