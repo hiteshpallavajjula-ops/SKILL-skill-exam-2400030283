@@ -23,7 +23,7 @@ services:
       - microservices-network
 
   exam-service:
-    image: docker-skill-exam-2400030283:latest
+    image: hiteshpvm/docker-skill-exam-2400030283:latest
     build:
       context: ./HotelServiceProject
       dockerfile: Dockerfile
