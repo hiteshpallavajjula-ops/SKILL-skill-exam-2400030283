@@ -1,4 +1,3 @@
-
 name: microservices-deployment
 
 services:
@@ -8,7 +7,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Kanehitesh!!2
+      POSTGRES_PASSWORD: Kanehitesh
       POSTGRES_DB: skill_exam_2400030283
     ports:
       - "5433:5432"
